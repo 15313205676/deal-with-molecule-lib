@@ -1,0 +1,26 @@
+#需要openbabel工具，下载地址http://openbabel.org/wiki/Main_Page
+#将SDF文件的Title修改为CAS编号
+#这是一个shell脚本
+#先将SDF文件分割为单个分子文件，再对其进行转化
+#-m
+#Produce multiple output files, to allow:
+#Splitting one input file - put each molecule into consecutively numbered output files
+#Batch conversion - convert each of multiple input files into a specified output format
+#这是openbabel的官网解读
+obabel 输入文件 -osdf -O new.sdf -m
+rm 输入文件
+#这条指令可以将输入文件分割为单独的文件
+#下面是一个循环，PATH输入绝对路径
+Folder_A="PATH"                                                            
+for file_a in ${Folder_A}/*
+do
+    #obabel $file_a --title -osdf -O $file_a
+    #sed -i 's/CAS Number/CAS/g' $file_a
+    #obabel $file_a --delete Name -osdf -O $file_a
+    obabel $file_a --title -osdf -O $file_a
+    obabel $file_a --append CAS -osdf -O $file_a
+    obabel $file_a -ocan -O $file_a.smi
+done
+cat *.smi > total.smi
+echo 'done'
+~                     
